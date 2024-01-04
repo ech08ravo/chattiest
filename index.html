@@ -16,9 +16,43 @@
     <input type="text" id="user-query" placeholder="Type your question here...">
     <button id="submit-query">Ask GPT</button>
     <div id="response"></div>
-
+    
     <script>
-        // JavaScript to handle the communication goes here
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('submit-query').addEventListener('click', function() {
+        const userQuery = document.getElementById('user-query').value;
+        getGPTResponse(userQuery);
+    });
+});
+
+function getGPTResponse(query) {
+    // Replace with the URL of your server-side script
+    const serverEndpoint = 'https://yourserver.com/api/gpt';
+
+    fetch(serverEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: query })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        displayResponse(data.response);
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
+}
+
+function displayResponse(response) {
+    document.getElementById('response').textContent = response || 'No response from GPT';
+}
     </script>
 </body>
 </html>
